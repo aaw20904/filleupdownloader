@@ -106,9 +106,12 @@ async function readDirectory(req, res) {
     let result = await fs.promises.readdir("./");
     let jsdata = JSON.stringify(result);
     let content='';
-    result.forEach(x=>{
-        content += `<a href="/files/${x}">${x}</a>`;
-    })
+ for(const x of result){
+        let finfo = await fs.promises.stat(x);
+        if(! finfo.isDirectory()) {
+            content += `<a href="/files/${x}">${x}</a>`;
+        }
+    }
 
     let template = `<!DOCTYPE html>
     <html lang="en">
