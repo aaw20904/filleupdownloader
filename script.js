@@ -3,7 +3,12 @@ window.onload = function () {
 }
 
 async function showFile (input) {
-  const chSize = 65535;
+  let progressBar = document.getElementById("progressBar");
+  let progressText = document.querySelector(".upl");
+  let progressStep;
+  let progressVal=0;
+  progressBar.value = 0;
+  const chSize = 256 * 1024;
   let file = input.files[0]
   console.log(file);
   const fileName = (((Math.random() * 65535)|0).toString(16))+file.name;
@@ -14,6 +19,7 @@ async function showFile (input) {
   if (chunks < 1) {
     chunks = 1;
   }  
+  progressStep = 100 / chunks;
   for (let idx=0; idx<chunks; idx++) {
       let slice = file.slice(currentPos, currentPos+chSize);
       currentPos += chSize;
@@ -48,6 +54,10 @@ async function showFile (input) {
             }
         }
     });
+    progressVal = progressVal + progressStep;
+    progressBar.value = progressVal | 0;
+    progressText.innerText = progressVal |0; 
+
 
      
 
